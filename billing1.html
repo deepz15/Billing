@@ -1,0 +1,101 @@
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            margin: unset;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body onload="loadAll()">
+
+    <table border="1">
+        <tr>
+            <th>PrName</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Total</th>
+        </tr>
+    </table>
+
+    <button onclick="loadAll()">Add Row</button>
+
+
+
+    <script>
+        var billing = [];
+
+        function loadAll() {
+            let tableEl = document.querySelector('table');
+            let trEl = document.createElement('tr');
+
+            let tdName = document.createElement('td');
+            let tdPrice = document.createElement('td');
+            let tdQty = document.createElement('td');
+            let tdTotalPrice = document.createElement('td');
+
+            tableEl.appendChild(trEl);
+
+            trEl.appendChild(tdName);
+            trEl.appendChild(tdPrice);
+            trEl.appendChild(tdQty);
+            trEl.appendChild(tdTotalPrice);
+
+            let selectEl = document.createElement('select');
+            tdName.appendChild(selectEl);
+
+            let priceInputEl = document.createElement('input');
+            tdPrice.appendChild(priceInputEl);
+            priceInputEl.type = 'number';
+            let qtyInputEl = document.createElement('input');
+            tdQty.appendChild(qtyInputEl);
+            qtyInputEl.type = 'number';
+            qtyInputEl.value = 1;
+            tdTotalPrice.innerText = 0;
+
+
+            let a = localStorage.getItem("porotta");
+            if (a) {
+                billing = JSON.parse(a);
+            }
+
+
+            for (let i = 0; i < billing.length; i++) {
+                let x = billing[0];
+            }
+
+            billing.forEach((x) => {
+                let optionEl = document.createElement('option');
+                selectEl.appendChild(optionEl);
+                optionEl.innerText = x.prName;
+            });
+            selectEl.value = " ";
+
+            selectEl.onchange = () => {
+                console.log('Select Changed', selectEl.value);
+                let x = billing.find(x => x.prName === selectEl.value);
+                priceInputEl.value = x.amount;
+                let total = x.amount * qtyInputEl.value;
+                tdTotalPrice.innerText = total;
+            };
+
+            priceInputEl.oninput = () => {
+                let total = priceInputEl.value * qtyInputEl.value;
+                tdTotalPrice.innerText = total;
+            }
+
+            qtyInputEl.oninput = () => {
+                let total = priceInputEl.value * qtyInputEl.value;
+                tdTotalPrice.innerText = total;
+            }
+
+
+
+        }
+    </script>
+</body>
+
+</html>
